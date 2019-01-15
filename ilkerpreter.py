@@ -83,7 +83,7 @@ def userinp(path):
 
 def hello():
     flush()
-    print '\033[5m'+"\nilkerpreter *@13 ocak 2019*\n\n"+'\033[0m'
+    print '\033[5m'+"\nilkerpreter *@15 ocak 2019*\n\n"+'\033[0m'
     # print '\033[96m'+"Press enter to reload the4 whenever you update the4.py .\n"+'\033[0m' #change log: made it automatic
     print '\033[96m'+'\033[7m'+'\033[4m'+"type 'help'"+'\033[0m'+'\033[96m'+"\n\npress ctrl+c or type 'quit' to quit anytime.\n\n"+'\033[0m'
     print "Your the4 will be updated automatically when you make a change.\n*commands that you enter will be calculated additively,\n*until you refresh the commands by typing rf*"
@@ -176,6 +176,9 @@ def interactive():
                  print "ls can't work. You need to return the (-,-,WD)"
              else:
                  try:
+                     if type(ff[2])!=str :
+                         print '\033[93m'+'\033[7m'+"!!! WD is probably a list. It must be a string.!!!"+'\033[0m'
+                         raise
                      ff=ff[2]
                      rft=ft(FS,ff)
                      if path!="/": print ". ",".. ",
@@ -200,7 +203,7 @@ def interactive():
             bl = lastFS==FS
             lastFS = copy.deepcopy(FS)
             FS = copy.deepcopy(initFS)
-
+            assert type(final[2])==str,'\033[93m'+'\033[7m'+"!!! WD is probably a list. It must be a string.!!!"+'\033[0m'
             if not final:
                 print "Maybe you haven't implemented that thing yet? Function returned 'None'"
                 blwd = None
