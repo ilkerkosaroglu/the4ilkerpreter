@@ -45,7 +45,7 @@ def ft(FS,WD):
             if i[0]==qd[1]:
                 del qd[1]
                 ftrt=copy.deepcopy(i)
-                break;
+                break
         else:
             print "WD is faulty? couldn't find the directory..:",WD
             return -1
@@ -123,7 +123,7 @@ def interactive():
 
         if inp[0]=="help":
             help()
-            continue;
+            continue
 
         if inp[0]=="update" or inp[0]=="reload":
             import the4
@@ -131,11 +131,11 @@ def interactive():
             from the4 import *
             a=os.system('del the4.pyc' if os.name == 'nt' else "rm the4.pyc")
             print '\033[3m'"\nthe4 reloaded successfully!"'\033[0m'
-            continue;
+            continue
 
         elif inp[0]=="exit" or inp[0]=="quit" or inp[0]=="bye":
             bye()
-            break;
+            break
 
         ########################
         elif inp[0]=="autotest":
@@ -146,7 +146,7 @@ def interactive():
             print "\nFilesystem:"
             prettify(lastFS)
             print
-            continue;
+            continue
 
         elif inp[0]=="refresh" or inp[0]=="rf":
             queueue=[]
@@ -155,7 +155,7 @@ def interactive():
             lastFS=copy.deepcopy(FS)
 
             print "refreshed! type 'flush' to clear your screen"
-            continue;
+            continue
 
         elif inp[0].startswith("test"):
             if inp[0]=="test":
@@ -164,11 +164,11 @@ def interactive():
                 try:
                     print check_commands(FS,eval(inp[0].split()[1]))
                 except: print "something went wrong.. try again?"
-            continue;
+            continue
 
         elif inp[0]=="flush":
             flush()
-            continue;
+            continue
 
         elif inp[0]=="ls":
              ff=check_commands(FS,queueue)
@@ -188,12 +188,12 @@ def interactive():
                      print
                      lastFS=copy.deepcopy(FS)
                      FS=copy.deepcopy(initFS)
-                     continue;
+                     continue
                  except:
                      print "ls couldn't work. You need to return the (-,-,WD)"
                      FS=copy.deepcopy(initFS)
                      lastFS=copy.deepcopy(FS)
-                     continue;
+                     continue
 
         else:
             while inp:
