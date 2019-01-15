@@ -6,8 +6,9 @@ You can:
 * Print the filesystem : *fs*
 * list current directory items: *ls*
 * check if your commands (cd, mkdir, rmdir, rm, cp, exec) work properly
+* type : *help* to list all the commands  
 
-All you have to do is to put ilkerpreter.py into the folder you have your the4.py . 
+All you have to do is to put ilkerpreter.py into the folder you have your the4.py. 
 run it by typing "python ilkerpreter.py" in your terminal.
 -----
 Type 'help' to see available commands.
