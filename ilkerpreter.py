@@ -55,7 +55,7 @@ def prettify(Tree,space=0,prt=True):
     if prt:
         print '\033[93m'+Tree[1].lower()+'\033[0m',"*"," "*space*3,Tree[0]
     if not Tree:return space
-    if prt:time.sleep(0.03)
+    #if prt:time.sleep(0.03)
     for node in Tree[2:]:
         prettify(node,space+1,prt)
 
