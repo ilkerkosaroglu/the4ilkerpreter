@@ -1,6 +1,9 @@
 # THE-4 ilkerpreter
 Interpreter designed to work through THE-4 commands.
 
+Also download test_data.py and put it in the same folder to get access to the "test" command. 
+It tests 25 cases, written by Burak Akkaya.
+
 You can:
 -----
 * Print the filesystem : *fs*
