@@ -5,6 +5,12 @@ import os,time,traceback
 import copy
 if os.name != 'nt':import readline
 aa=os.system('del the4.pyc' if os.name == 'nt' else "rm the4.pyc")
+try:
+    import test_data #test cases by Burak Akkaya
+    aa=os.system('del test_data.pyc' if os.name == 'nt' else "rm test_data.pyc")
+except:
+    print "no test data. test command can't work."
+    # time.sleep(1)
 
 ######################
 #Using default FS + test file. Change it below.
@@ -13,7 +19,7 @@ FS = ["/", "d",\
 ["home", "D", ["the4", "d", ["the4", "D"], ["the.py", "F"]]],\
 ["etc", "d"],\
 ["tmp", "D", ["tmp.sh", "f"], ["del.txt", "F"]],\
-["tst.txt","f"]\
+["rootfile.txt","f"]\
 ]
 
 c1 = ["cd home/the4/",\
@@ -55,7 +61,7 @@ def prettify(Tree,space=0,prt=True):
     if prt:
         print '\033[93m'+Tree[1].lower()+'\033[0m',"*"," "*space*3,Tree[0]
     if not Tree:return space
-    #if prt:time.sleep(0.03)
+    if prt:time.sleep(0.01)
     for node in Tree[2:]:
         prettify(node,space+1,prt)
 
@@ -83,7 +89,7 @@ def userinp(path):
 
 def hello():
     flush()
-    print '\033[5m'+"\nilkerpreter *@19 ocak 2019*\n\n"+'\033[0m'
+    print '\033[5m'+"\nilkerpreter *@20 ocak 2019*\n\n"+'\033[0m'
     # print '\033[96m'+"Press enter to reload the4 whenever you update the4.py .\n"+'\033[0m' #change log: made it automatic
     print '\033[96m'+'\033[7m'+'\033[4m'+"type:"+'\033[0m'+'\033[4m'+"'help'"+'\033[0m'+'\033[96m'+"\n\npress ctrl+c or type 'quit' to quit anytime.\n\n"+'\033[0m'
     # print "Your the4 will be updated automatically when you make a change.\n*commands that you enter will be calculated additively,\n*until you refresh the commands by typing rf*"
@@ -97,7 +103,7 @@ def help():
     print '\033[4m'+"\n----------&----------"+'\033[0m'
     print "\nAll available commands:"
 
-    print "* ls\n* fs: print the file system (prettified)\n* reload/update: reload the4.py manually (does everytime you enter a command)\n* test c1/c2\n* refresh(rf): empty the command stack\n* +{all commands specified in the4}\n* flush: clear screen\n* exit/quit/ctrl+c\n"
+    print "* ls\n* fs: print the file system (prettified)\n* reload/update: reload the4.py manually (does everytime you enter a command)\n\n* test: tester by Burak Akkaya\n\n* refresh(rf): empty the command stack\n* +{all commands specified in the4}\n* flush: clear screen\n* exit/quit/ctrl+c\n"
 
 def interactive():
     global FS
@@ -138,8 +144,45 @@ def interactive():
             break
 
         ########################
-        elif inp[0]=="autotest":
-            pass # test cases go here (not implemented)
+        elif inp[0]=="test" or inp[0]=="autotest":
+            import test_data #test cases by Burak Akkaya
+            reload(test_data)
+            aa=os.system('del test_data.pyc' if os.name == 'nt' else "rm test_data.pyc")
+            initdata=[]
+            with open("test_data.py") as f:
+                    for i in f:
+                        initdata.append(i)
+            # print initdata
+            #tester by Burak Akkaya
+            test_no = 1
+            error = 0
+            while test_no < 26:
+                test_fs = "FS" + "%03d" % test_no
+                test_c = "C" + "%03d" % test_no
+                test_r = "R" + "%03d" % test_no
+
+                cc=check_commands(vars(test_data)[test_fs], vars(test_data)[test_c])
+                vars(test_data)[test_fs]=init=vars(test_data)[test_fs+"y"]
+                if cc[2][:-1] == vars(test_data)[test_r][2]:
+                    c=cc[2][:-1]
+                    b=cc[1]
+                    a=cc[0]
+                    cc=a,b,c
+                if  cc != vars(test_data)[test_r]:
+                    print "-" * 30 + "%03d" % test_no + "-" * 30
+                    print '\033[93m' + test_fs + " >" + '\033[0m'
+                    prettify(vars(test_data)[test_fs])
+                    print '\033[93m' + test_c + " >" + '\033[0m', vars(test_data)[test_c][0]
+                    for x in vars(test_data)[test_c][1:]:
+                        print " " * 7 + x
+                    print '\033[93m' + "Result >" + '\033[0m', cc
+                    print '\033[93m' + "Ex.Result >" + '\033[0m', vars(test_data)[test_r]
+                    error += 1
+                test_no += 1
+            print "-" * 63 + "\n", test_no-1, "test cases applied.\n" + "Test completed with", error, "failures."
+            with open("test_data.py","w") as f:
+                for i in initdata:
+                    f.write(i)
         ########################
 
         elif inp[0]=="pfs" or inp[0]=="fs":
@@ -157,14 +200,14 @@ def interactive():
             print "refreshed! type 'flush' to clear your screen"
             continue
 
-        elif inp[0].startswith("test"):
-            if inp[0]=="test":
-                print "Type 'test c1' or 'test c2' to test the examples in pdf"
-            else:
-                try:
-                    print check_commands(FS,eval(inp[0].split()[1]))
-                except: print "something went wrong.. try again?"
-            continue
+        # elif inp[0].startswith("auto"):
+        #     if inp[0]=="autotest":
+        #         print "Type 'autotest c1' or 'autotest c2' to test the examples in pdf"
+        #     else:
+        #         try:
+        #             print check_commands(FS,eval(inp[0].split()[1]))
+        #         except: print "something went wrong.. try again?"
+        #     continue
 
         elif inp[0]=="flush":
             flush()
@@ -234,4 +277,5 @@ def interactive():
           path="/"
           FS=copy.deepcopy(initFS)
           lastFS=copy.deepcopy(FS)
+
 interactive()
