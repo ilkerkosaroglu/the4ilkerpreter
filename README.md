@@ -1,8 +1,8 @@
 # THE-4 ilkerpreter
 Interpreter designed to work through THE-4 commands.
 
-Also download test_data.py and put it in the same folder to get access to the "test" command. 
-It tests 25 cases, written by Burak Akkaya.
+Also download testcases.txt and put it in the same folder to get access to the "test" command. 
+It tests all 50 cases, used to evaluate THE4 grades.
 
 You can:
 -----
@@ -29,6 +29,3 @@ the interpreter doesn't actually need you to return FS. only proper WD is suffic
 
 try typing 'fs'!
 
-Changes:  
-14 Jan 2019  
-Added error handling, KeyboardInterrupt and regular checks to take care of sudden crashing.
