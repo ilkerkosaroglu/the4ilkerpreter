@@ -1,0 +1,214 @@
+-----------------------------------------------------------
+CASE 1: check_commands(['/', 'd'], ['cd'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd'], '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 2: check_commands(['/', 'd'], ['cd .'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd'], '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 3: check_commands(['/', 'd'], ['cd home'])
+EXPECTED RESULT: ('ERROR', 'cd home', '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 4: check_commands(['/', 'd'], ['cd /'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd'], '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 5: check_commands(['/', 'd'], ['cd ..'])
+EXPECTED RESULT: ('ERROR', 'cd ..', '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 6: check_commands(['/', 'd'], ['cd /home/../../home'])
+EXPECTED RESULT: ('ERROR', 'cd /home/../../home', '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 7: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd /home/..///////./home'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], '/home')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 8: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd home', 'cd Desktop/the2', 'cd ../the3'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], '/home/Desktop/the3')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 9: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd /home/Desktop/the2/..', 'cd ../the3'])
+EXPECTED RESULT: ('ERROR', 'cd ../the3', '/home/Desktop')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 10: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd /home/Desktop/the2/.', 'cd ../the2/the2.py'])
+EXPECTED RESULT: ('ERROR', 'cd ../the2/the2.py', '/home/Desktop/the2')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 11: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd /home/Desktop/the2', 'rmdir ../the3'])
+EXPECTED RESULT: ('ERROR', 'rmdir ../the3', '/home/Desktop/the2')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 12: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd /home/Desktop/the2', 'rmdir ..'])
+EXPECTED RESULT: ('ERROR', 'rmdir ..', '/home/Desktop/the2')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 13: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd /home/Desktop/the2', 'rmdir .'])
+EXPECTED RESULT: ('ERROR', 'rmdir .', '/home/Desktop/the2')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 14: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd /home/Desktop/the2', 'rmdir /etc', 'cd', 'cd ..'])
+EXPECTED RESULT: ('ERROR', 'cd ..', '/')
+FINAL FS: ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]], ['Documents', 'd', ['form.doc', 'f']]]]
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 15: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd /home/Desktop/the2', 'rmdir ./the2.py'])
+EXPECTED RESULT: ('ERROR', 'rmdir ./the2.py', '/home/Desktop/the2')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 16: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd /home/Desktop/the2', 'rmdir ./the3'])
+EXPECTED RESULT: ('ERROR', 'rmdir ./the3', '/home/Desktop/the2')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 17: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd /home/Desktop/', 'rm .'])
+EXPECTED RESULT: ('ERROR', 'rm .', '/home/Desktop')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 18: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd /home/Desktop/', 'rm the4/the4.c'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], '/home/Desktop')
+FINAL FS: ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']]
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 19: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd /home/Desktop/', 'rm ../../etc', 'mkdir test'])
+EXPECTED RESULT: ('ERROR', 'rm ../../etc', '/home/Desktop')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 20: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd /home/Desktop/', 'rm the2/the2.c', 'cd ..', 'mkdir test'])
+EXPECTED RESULT: ('ERROR', 'rm the2/the2.c', '/home/Desktop')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 21: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd /home/Desktop/', 'exec the2', 'rm the4/the4.c'])
+EXPECTED RESULT: ('ERROR', 'exec the2', '/home/Desktop')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 22: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd /home/Desktop/', 'exec ./ceng140/hw1/hw1.exe', 'rm the4/the4.c'])
+EXPECTED RESULT: ('ERROR', 'exec ./ceng140/hw1/hw1.exe', '/home/Desktop')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 23: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd /home/Desktop/', 'exec ./ceng140/hw1/hw1'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], '/home/Desktop')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 24: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['exec etc'])
+EXPECTED RESULT: ('ERROR', 'exec etc', '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 25: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['exec /home/Desktop/ceng140/hw1/hw1.exe'])
+EXPECTED RESULT: ('ERROR', 'exec /home/Desktop/ceng140/hw1/hw1.exe', '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 26: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['exec /home/Desktop/ceng140/hw1/hw1'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 27: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['mkdir etc'])
+EXPECTED RESULT: ('ERROR', 'mkdir etc', '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 28: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['mkdir the2'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D'], ['the2', 'd']], '/')
+FINAL FS: ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D'], ['the2', 'd']]
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 29: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['mkdir usr/bin'])
+EXPECTED RESULT: ('ERROR', 'mkdir usr/bin', '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 30: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd /home/Desktop/the2', 'mkdir ../the3'])
+EXPECTED RESULT: ('ERROR', 'mkdir ../the3', '/home/Desktop/the2')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 31: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cd /home/Desktop/the2', 'mkdir ../ceng140/hw2'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']], ['hw2', 'd']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], '/home/Desktop/the2')
+FINAL FS: ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']], ['hw2', 'd']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']]
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 32: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['mkdir /home/Desktop/ceng111'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]], ['ceng111', 'd']], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], '/')
+FINAL FS: ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]], ['ceng111', 'd']], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']]
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 33: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['mkdir /home/Desktop/ceng140'])
+EXPECTED RESULT: ('ERROR', 'mkdir /home/Desktop/ceng140', '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 34: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cp /home/Desktop/the2 ./home'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']]], ['etc', 'D']], '/')
+FINAL FS: ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']]], ['etc', 'D']]
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 35: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd']], ['etc', 'D']], ['cp /home/Desktop/the3 /home/other'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd', ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]]], ['etc', 'D']], '/')
+FINAL FS: ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd', ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]]], ['etc', 'D']]
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 36: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], ['cp /home/Desktop/the2/the2.pdf ./home'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['the2.pdf', 'f']], ['etc', 'D']], '/')
+FINAL FS: ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['the2.pdf', 'f']], ['etc', 'D']]
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 37: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd']], ['etc', 'D']], ['cp /home/Desktop/the3/the3.pdf /home/other'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd', ['the3.pdf', 'F']]], ['etc', 'D']], '/')
+FINAL FS: ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd', ['the3.pdf', 'F']]], ['etc', 'D']]
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 38: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd']], ['etc', 'D']], ['cp /home/Desktop/the3/the3.c /home/other'])
+EXPECTED RESULT: ('ERROR', 'cp /home/Desktop/the3/the3.c /home/other', '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 39: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd']], ['etc', 'D']], ['cp /home/Desktop/the3/the3.pdf /home/other/ceng111the3.pdf'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd', ['ceng111the3.pdf', 'F']]], ['etc', 'D']], '/')
+FINAL FS: ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd', ['ceng111the3.pdf', 'F']]], ['etc', 'D']]
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 40: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd']], ['etc', 'D']], ['cp /home/Desktop/the3 /home/other/ceng111the3'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd', ['ceng111the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]]], ['etc', 'D']], '/')
+FINAL FS: ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd', ['ceng111the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']]]], ['etc', 'D']]
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 41: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd']], ['etc', 'D']], ['cd /home/Desktop /home/Documents'])
+EXPECTED RESULT: ('ERROR', 'cd /home/Desktop /home/Documents', '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 42: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd']], ['etc', 'D']], ['rmdir'])
+EXPECTED RESULT: ('ERROR', 'rmdir', '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 43: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd']], ['etc', 'D']], ['rm /home/Desktop/the2/the2.pdf /home/Desktop/the3/the3.pdf'])
+EXPECTED RESULT: ('ERROR', 'rm /home/Desktop/the2/the2.pdf /home/Desktop/the3/the3.pdf', '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 44: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd']], ['etc', 'D']], ['cp /home/Desktop/the2/the2.py /home/other /home/etc/'])
+EXPECTED RESULT: ('ERROR', 'cp /home/Desktop/the2/the2.py /home/other /home/etc/', '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 45: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd']], ['etc', 'D']], ['mkdir test test2'])
+EXPECTED RESULT: ('ERROR', 'mkdir test test2', '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 46: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd']], ['etc', 'D']], ['exec /home/Desktop/ceng140/hw1/hw1.exe /home/Desktop/ceng140/hw1/hw1.exe'])
+EXPECTED RESULT: ('ERROR', 'exec /home/Desktop/ceng140/hw1/hw1.exe /home/Desktop/ceng140/hw1/hw1.exe', '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 47: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd']], ['etc', 'D']], ['mv /home/Desktop/the3/the3.pdf /home/other/ceng111the3.pdf'])
+EXPECTED RESULT: ('ERROR', 'mv /home/Desktop/the3/the3.pdf /home/other/ceng111the3.pdf', '/')
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 48: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd']], ['etc', 'D']], ['cd /home/Desktop', 'cp the2 ../other/', 'cd ../Documents', 'rm form.doc', 'cd ..', 'rmdir Documents'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['other', 'd', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']]]], ['etc', 'D']], '/home')
+FINAL FS: ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['other', 'd', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']]]], ['etc', 'D']]
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 49: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd']], ['etc', 'D']], ['cd /home/Desktop', 'cp the2 ../other/', 'cd ../Documents', 'cd ..', 'rmdir Documents', 'mkdir test'])
+EXPECTED RESULT: ('ERROR', 'rmdir Documents', '/home')
+FINAL FS: ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']]]], ['etc', 'D']]
+-----------------------------------------------------------
+-----------------------------------------------------------
+CASE 50: check_commands(['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['Documents', 'd', ['form.doc', 'f']], ['other', 'd']], ['etc', 'D']], ['cd home/', 'cp Documents /home/other/DocumentsBackup', 'rm Documents/form.doc', 'rmdir Documents', 'mkdir Documents', 'cp ./other/DocumentsBackup/form.doc Documents/', 'exec Documents/form.doc', 'cd ..', 'cp /home/Desktop/the2 /home/other/the2Backup', 'mkdir /home/other/the2Backup/test'])
+EXPECTED RESULT: ('SUCCESS', ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['other', 'd', ['DocumentsBackup', 'd', ['form.doc', 'f']], ['the2Backup', 'd', ['the2.pdf', 'f'], ['the2.py', 'F'], ['test', 'd']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']], '/')
+FINAL FS: ['/', 'd', ['home', 'd', ['Desktop', 'D', ['the2', 'd', ['the2.pdf', 'f'], ['the2.py', 'F']], ['the3', 'D', ['the3.pdf', 'F'], ['the3.py', 'f']], ['the4', 'd', ['the4.pdf', 'F'], ['the4.py', 'f'], ['the4.c', 'f']], ['ceng140', 'D', ['hw1', 'd', ['hw1.pdf', 'f'], ['hw1.c', 'f'], ['hw1', 'f']]]], ['other', 'd', ['DocumentsBackup', 'd', ['form.doc', 'f']], ['the2Backup', 'd', ['the2.pdf', 'f'], ['the2.py', 'F'], ['test', 'd']]], ['Documents', 'd', ['form.doc', 'f']]], ['etc', 'D']]
+-----------------------------------------------------------
