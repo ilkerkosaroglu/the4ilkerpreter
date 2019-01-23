@@ -104,7 +104,7 @@ def help():
     print '\033[4m'+"\n----------&----------"+'\033[0m'
     print "\nAll available commands:"
 
-    print "* ls\n* fs: print the file system (prettified)\n* reload/update: reload the4.py manually (does everytime you enter a command)\n\n* test: tester by Burak Akkaya\n\n* refresh(rf): empty the command stack\n* +{all commands specified in the4}\n* flush: clear screen\n* exit/quit/ctrl+c\n"
+    print "* ls\n* fs: print the file system (prettified)\n* reload/update: reload the4.py manually (does everytime you enter a command)\n\n* test: tester \n\n* refresh(rf): empty the command stack\n* +{all commands specified in the4}\n* flush: clear screen\n* exit/quit/ctrl+c\n"
 
 def interactive():
     global FS
