@@ -5,12 +5,6 @@ import os,time,traceback
 import copy
 if os.name != 'nt':import readline
 aa=os.system('del the4.pyc' if os.name == 'nt' else "rm the4.pyc")
-try:
-    import test_data #test cases by Burak Akkaya
-    aa=os.system('del test_data.pyc' if os.name == 'nt' else "rm test_data.pyc")
-except:
-    print "no test data. test command can't work."
-    # time.sleep(1)
 
 ######################
 #Using default FS + test file. Change it below.
@@ -86,10 +80,17 @@ def userinp(path):
     inp=inp.strip(" ")
     inp=rmWhite(inp)
     return inp
-
+def parse(st):
+    # print st
+    s=st.strip()[15:]
+    s=s[:-1]
+    # print s
+    n=eval(s)
+    # print n
+    return n[0],n[1]
 def hello():
     flush()
-    print '\033[5m'+"\nilkerpreter *@20 ocak 2019*\n\n"+'\033[0m'
+    print '\033[5m'+"\nilkerpreter *@24 ocak 2019 :)*\n\n"+'\033[0m'
     # print '\033[96m'+"Press enter to reload the4 whenever you update the4.py .\n"+'\033[0m' #change log: made it automatic
     print '\033[96m'+'\033[7m'+'\033[4m'+"type:"+'\033[0m'+'\033[4m'+"'help'"+'\033[0m'+'\033[96m'+"\n\npress ctrl+c or type 'quit' to quit anytime.\n\n"+'\033[0m'
     # print "Your the4 will be updated automatically when you make a change.\n*commands that you enter will be calculated additively,\n*until you refresh the commands by typing rf*"
@@ -145,44 +146,65 @@ def interactive():
 
         ########################
         elif inp[0]=="test" or inp[0]=="autotest":
-            import test_data #test cases by Burak Akkaya
-            reload(test_data)
-            aa=os.system('del test_data.pyc' if os.name == 'nt' else "rm test_data.pyc")
-            initdata=[]
-            with open("test_data.py") as f:
-                    for i in f:
-                        initdata.append(i)
-            # print initdata
-            #tester by Burak Akkaya
-            test_no = 1
-            error = 0
-            while test_no < 26:
-                test_fs = "FS" + "%03d" % test_no
-                test_c = "C" + "%03d" % test_no
-                test_r = "R" + "%03d" % test_no
+            L=[]
+            with open("testcases.txt","r") as f:
+                for i in f:
+                    L.append(i)
+            H=[]
 
-                cc=check_commands(vars(test_data)[test_fs], vars(test_data)[test_c])
-                vars(test_data)[test_fs]=init=vars(test_data)[test_fs+"y"]
-                if cc[2][:-1] == vars(test_data)[test_r][2]:
-                    c=cc[2][:-1]
-                    b=cc[1]
-                    a=cc[0]
-                    cc=a,b,c
-                if  cc != vars(test_data)[test_r]:
-                    print "-" * 30 + "%03d" % test_no + "-" * 30
-                    print '\033[93m' + test_fs + " >" + '\033[0m'
-                    prettify(vars(test_data)[test_fs])
-                    print '\033[93m' + test_c + " >" + '\033[0m', vars(test_data)[test_c][0]
-                    for x in vars(test_data)[test_c][1:]:
-                        print " " * 7 + x
-                    print '\033[93m' + "Result >" + '\033[0m', cc
-                    print '\033[93m' + "Ex.Result >" + '\033[0m', vars(test_data)[test_r]
-                    error += 1
-                test_no += 1
-            print "-" * 63 + "\n", test_no-1, "test cases applied.\n" + "Test completed with", error, "failures."
-            with open("test_data.py","w") as f:
-                for i in initdata:
-                    f.write(i)
+            inp=raw_input("print all [y] ? else press enter to print only the wrong cases >>>")
+            pall=False
+            if inp.lower().startswith("y"):
+                pall=True
+            errnum=0
+            temp=[]
+            for i in L:
+                if i[0]=="-":
+                    if temp:H.append(temp)
+                    temp=[]
+                    continue
+                temp.append(i.split(":"))
+            print H[0]
+            for i in H:
+                flag=False
+                if not pall:
+                    # if womethin is wrong..:
+                    ti=copy.deepcopy(i[0][1])
+                    if (not eval(ti)==eval(i[1][1].strip())):
+                        flag=True
+                    ti=copy.deepcopy(i[0][1])
+                    ggg=eval(ti)
+                    ggg=ggg[0],ggg[1],ggg[2][:-1]
+                    if ggg==eval(i[1][1].strip()):
+                        flag=False
+                else:
+                    flag=True
+                if flag:
+                    errnum+=1
+                    for k in i:
+                        print '\033[93m'+k[0]+'\033[0m'
+                        if k[0].startswith("CA"):
+                            x = eval(k[1])
+                            print
+                            print k[1].strip()
+                            fff,ccc=parse(k[1])
+                            print
+                            print  '\033[93m'+"Initial FS:"+'\033[0m'
+                            prettify(fff)
+                            print
+                            print '\033[93m'+"Commands:"+'\033[0m'
+                            for ll in ccc:
+                                print "*--*",ll
+                            print
+                            print '\033[93m'+"YOUR ANSWER"+'\033[0m'
+                            print x
+                        if k[0].startswith("FIN"):
+                            prettify(eval(k[1]))
+                        if k[0].startswith("EX"):
+                            print k[1].strip()
+                            print "\n---"
+                    print '\033[4m'+"-------&-------"+'\033[0m'
+            print "Finished with:",errnum,"errors."
         ########################
 
         elif inp[0]=="pfs" or inp[0]=="fs":
@@ -199,15 +221,6 @@ def interactive():
 
             print "refreshed! type 'flush' to clear your screen"
             continue
-
-        # elif inp[0].startswith("auto"):
-        #     if inp[0]=="autotest":
-        #         print "Type 'autotest c1' or 'autotest c2' to test the examples in pdf"
-        #     else:
-        #         try:
-        #             print check_commands(FS,eval(inp[0].split()[1]))
-        #         except: print "something went wrong.. try again?"
-        #     continue
 
         elif inp[0]=="flush":
             flush()
